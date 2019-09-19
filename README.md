@@ -1,8 +1,8 @@
 # lab-04
 
-## Project Name
+## Data Modeling
 
-### Author: Student/Group Name
+### Author: Jonathon Schwamman
 
 ### Links and Resources
 * [submission PR](https://github.com/Schwamman-401-advanced-javascript/lab-04/pull/1)
