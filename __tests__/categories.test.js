@@ -20,7 +20,7 @@ describe('Categories Model', () => {
     expect(categories.sanitize(testRecord)).toBeUndefined();
   });
 
-  it('can post() a new category', () => {
+  it('can create() a new category', () => {
     let obj = { name: 'Test Category' };
     return categories.create(obj)
       .then(record => {
@@ -35,11 +35,37 @@ describe('Categories Model', () => {
     let obj = { name: 'Test Category' };
     return categories.create(obj)
       .then(record => {
-        return categories.get(record._id)
+        return categories.get(record.id)
           .then(category => {
             Object.keys(obj).forEach(key => {
               expect(category[0][key]).toEqual(obj[key]);
             });
+          });
+      });
+  });
+
+  it('can delete() a category', () => {
+    let obj = { name: 'Test Category' };
+    return categories.create(obj)
+      .then(record => {
+        return categories.delete(record.id)
+          .then(() => {
+            return categories.get(record.id)
+              .then(result => {
+                expect(result).toEqual([]);
+              });
+          });
+      });
+  });
+
+  it('can update() a category', () => {
+    let obj = { name: 'Test Category' };
+    return categories.create(obj)
+      .then(record => {
+        return categories.update(record.id, { name: 'Updated', id: record.id})
+          .then(updatedRecord => {
+            expect(updatedRecord).not.toEqual(record);
+            expect(updatedRecord).toEqual({ name: 'Updated', id: record.id});
           });
       });
   });

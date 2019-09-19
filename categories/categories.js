@@ -4,11 +4,10 @@ const DataModel = require('../memory.js');
 
 class Categories extends DataModel {
   constructor() {
-    super();
-    this.schema = {
+    super({
       id: { required: true },
       name: { required: true },
-    };
+    });
   }
 }
 
