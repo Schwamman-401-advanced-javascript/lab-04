@@ -5,37 +5,40 @@
 ### Author: Student/Group Name
 
 ### Links and Resources
-* [submission PR](http://xyz.com)
-* [travis](http://xyz.com)
-* [back-end](http://xyz.com) (when applicable)
-* [front-end](http://xyz.com) (when applicable)
+* [submission PR](https://github.com/Schwamman-401-advanced-javascript/lab-04/pull/1)
+* [travis](https://www.travis-ci.com/Schwamman-401-advanced-javascript/lab-04)
 
 #### Documentation
-* [api docs](http://xyz.com) (API servers)
-* [jsdoc](http://xyz.com) (Server assignments)
-* [styleguide](http://xyz.com) (React assignments)
+
 
 ### Modules
-#### `modulename.js`
+#### `validator.js`
 ##### Exported Values and Methods
 
-###### `foo(thing) -> string`
-Usage Notes or examples
+###### `isValid(schema,data) -> boolean`
+Takes in data to validate against a given schema and returns true if valid or false if invalid.
 
-###### `bar(array) -> array`
-Usage Notes or examples
+#### `memory.js`
+##### Exported Values and Methods
+
+###### `get(id) -> object`
+Takes in an id for an object in the database and returns the corresponding object.
+
+###### `create(entry) -> object`
+Adds the given object to the database and returns the newly created object.
+
+###### `update(id, entry) -> object`
+Updates the object to the given entry for the corresponding object id and then returns the updated object.
+
+###### `delete(id) -> promise`
+Takes in an object with an id and deletes the corresponding object from the database. 
 
 ### Setup
-#### `.env` requirements
-* `PORT` - Port Number
-* `MONGODB_URI` - URL to the running mongo instance/db
+npm install
 
 #### Running the app
-* `npm start`
-* Endpoint: `/foo/bar/`
-  * Returns a JSON object with abc in it.
-* Endpoint: `/bing/zing/`
-  * Returns a JSON object with xyz in it.
+
+
   
 #### Tests
 * How do you run tests?
