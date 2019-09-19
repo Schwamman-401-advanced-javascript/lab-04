@@ -1,73 +1,76 @@
 const Categories = require('../categories/categories.js');
+const Products = require('../categories/products.js');
 
-describe('Categories Model', () => {
+function runTests(Constructor, testObj, updatedTestObj) {
+  describe(`${Constructor.name} Model`, () => {
 
-  let categories;
-
-  beforeEach(() => {
-    categories = new Categories();
-  })
-
-  // How might we repeat this to check on types?
-  it('sanitize() returns undefined with missing requirements', () => {
-    const schema = categories.schema;
-    var testRecord = {};
-    for (var field in schema) {
-      if (schema[field].required) {
-        testRecord[field] = null;
+    let repository;
+  
+    beforeEach(() => {
+      repository = new Constructor();
+    });
+  
+    // How might we repeat this to check on types?
+    it('sanitize() returns undefined with missing requirements', () => {
+      const schema = repository.schema;
+      var testRecord = {};
+      for (var field in schema) {
+        if (schema[field].required) {
+          testRecord[field] = null;
+        }
       }
-    }
-    expect(categories.sanitize(testRecord)).toBeUndefined();
-  });
-
-  it('can create() a new category', () => {
-    let obj = { name: 'Test Category' };
-    return categories.create(obj)
-      .then(record => {
-        Object.keys(obj).forEach(key => {
-          expect(record[key]).toEqual(obj[key]);
-        });
-      })
-      .catch(e => console.error('ERR', e));
-  });
-
-  it('can get() a category', () => {
-    let obj = { name: 'Test Category' };
-    return categories.create(obj)
-      .then(record => {
-        return categories.get(record.id)
-          .then(category => {
-            Object.keys(obj).forEach(key => {
-              expect(category[0][key]).toEqual(obj[key]);
-            });
+      expect(repository.sanitize(testRecord)).toBeUndefined();
+    });
+  
+    it('can create() a new category', () => {
+      return repository.create(testObj)
+        .then(record => {
+          Object.keys(testObj).forEach(key => {
+            expect(record[key]).toEqual(testObj[key]);
           });
-      });
-  });
-
-  it('can delete() a category', () => {
-    let obj = { name: 'Test Category' };
-    return categories.create(obj)
-      .then(record => {
-        return categories.delete(record.id)
-          .then(() => {
-            return categories.get(record.id)
-              .then(result => {
-                expect(result).toEqual([]);
+        })
+        .catch(e => console.error('ERR', e));
+    });
+  
+    it('can get() a category', () => {
+      return repository.create(testObj)
+        .then(record => {
+          return repository.get(record.id)
+            .then(category => {
+              Object.keys(testObj).forEach(key => {
+                expect(category[0][key]).toEqual(testObj[key]);
               });
-          });
-      });
+            });
+        });
+    });
+  
+    it('can delete() a category', () => {
+      return repository.create(testObj)
+        .then(record => {
+          return repository.delete(record.id)
+            .then(() => {
+              return repository.get(record.id)
+                .then(result => {
+                  expect(result).toEqual([]);
+                });
+            });
+        });
+    });
+  
+    it('can update() a category', () => {
+      return repository.create(testObj)
+        .then(record => {
+          updatedTestObj.id = record.id;
+          return repository.update(record.id, updatedTestObj)
+            .then(updatedRecord => {
+              expect(updatedRecord).not.toEqual(record);
+              expect(updatedRecord).toEqual(updatedTestObj);
+            });
+        });
+    });
+  
   });
+}
 
-  it('can update() a category', () => {
-    let obj = { name: 'Test Category' };
-    return categories.create(obj)
-      .then(record => {
-        return categories.update(record.id, { name: 'Updated', id: record.id})
-          .then(updatedRecord => {
-            expect(updatedRecord).not.toEqual(record);
-            expect(updatedRecord).toEqual({ name: 'Updated', id: record.id});
-          });
-      });
-  });
-
-});
+runTests(Categories, { name: 'Test Category' }, { name: 'Updated'});
+runTests(Products, { category_id: 1, price: 10.00, quantity_in_stock: 2 }, { category_id: 2, price: 8.00, quantity_in_stock: 8 });
